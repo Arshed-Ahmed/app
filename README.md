@@ -1,5 +1,6 @@
 # App
 Front-end for the DAPP
 
-react-bootstrap
-raect-raoter-dom
+yarn add react-bootstrap
+yarn add bootstrap
+yarn add react-router-dom
