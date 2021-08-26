@@ -1,5 +1,6 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
+import { Link } from 'react-router-dom';
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -27,8 +28,13 @@ function Home() {
                         />
                     </Row>
                     <h6 className="welcomemsg">Welcome to SafeEnviro DAPP</h6>
-                    <button className="btn-signup" type="submit">SIGN UP</button>
-                    <button className="btn-signin" type="submit">SIGN IN</button>
+                    <Link to="/signup">
+                      <button className="btn-signup" type="submit">SIGN UP</button>
+                    </Link>
+                    <Link to="/login">
+                      <button className="btn-signin" type="submit">SIGN IN</button>
+                    </Link>
+                  
                 </Col>
               </Row>
             </Form>

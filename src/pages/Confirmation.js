@@ -1,5 +1,6 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
+import { Link } from "react-router-dom";
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -24,7 +25,9 @@ function Confirmation() {
                 <Form className="wastecollectionform">
                     <Row>
                         <Col>
+                          <Link to="/login">
                             <button className="btn-backtosignin" type="submit">BACK TO SIGN IN PAGE</button>
+                          </Link>
                         </Col>
                     </Row>
                 </Form>

@@ -1,5 +1,6 @@
 import React from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
+import { Link } from "react-router-dom";
 import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -30,7 +31,7 @@ function ForgotPassword() {
                 </Row>
                 <Row>
                     <p className="bottom-para mt-3">
-                            Don't have an account? <a href="/signup">Signup</a>
+                            Don't have an account? <Link to="/signup">Signup</Link>
                     </p>
                 </Row>
             </Form>
