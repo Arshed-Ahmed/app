@@ -6,13 +6,13 @@ import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
 import Table from 'react-bootstrap/Table';
-import Navibar from './Navibar';
+import AdminNavbar from './components/AdminNavbar';
 import './App.css';
 
-function Review_form() {
+function Reviewform() {
   return (
     <div className="bg-light">
-      <Navibar />
+      <AdminNavbar />
       <Container className="justify-content-end col-lg-9 col-md-11 col-sm-12 card-div">
         <Card>
           <Card.Body>
@@ -21,7 +21,7 @@ function Review_form() {
             <Form className="wastecollectionform">
                 <Row>
                     <Col>
-                        <Table id="review-table" striped bordered hover responsive size="sm">
+                        <Table id="review-table" bordered hover responsive size="sm">
                             <thead>
                                 <tr>
                                     <th className="py-2 px-2"></th>
@@ -46,9 +46,9 @@ function Review_form() {
                                     <td>
                                     {['checkbox'].map((type) => (
                                         <div key={type}>
-                                        <Form.Check type={type} id={`check-api-${type}`}>
-                                            <Form.Check.Input type={type} isValid />
-                                        </Form.Check>
+                                            <Form.Check type={type} id={`check-api-${type}`}>
+                                                <Form.Check.Input type={type} isValid />
+                                            </Form.Check>
                                         </div>
                                     ))}
                                     </td>
@@ -107,4 +107,4 @@ function Review_form() {
   );
 }
 
-export default Review_form;
+export default Reviewform;

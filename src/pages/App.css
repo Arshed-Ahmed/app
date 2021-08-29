@@ -5,6 +5,9 @@
 #fspan{
   color: rgb(0, 0, 0);
 }
+.alert-div{
+  font-size: 14px;
+}
 .footer{
   background-color: rgb(1, 86, 155);
   color: white;
@@ -24,7 +27,11 @@
 }
 .navbar-nav{
   width: 80%;
-  justify-content: space-between;
+  align-items: center;
+  justify-content: flex-end;
+}
+.nav-link{
+  margin-right: 40px;
 }
 .hover:hover{
   color: black;
