@@ -59,7 +59,7 @@ app.post('/signup', (req, res)=> {
                 [username, hash, email, type], 
                 (err, result)=>{
                     if (err) {
-                        res.send({err: err});
+                        res.send({err});
                     } 
                     if (result){
                         res.send({reg:true});
@@ -107,7 +107,7 @@ app.post('/login', (req, res)=> {
         username, 
         (err, result)=>{
             if (err) {
-                res.send({err: err});
+                res.send({err});
             } 
             if(result){
                 if ( result.length > 0){
@@ -148,7 +148,7 @@ app.post('/collectionform', (req, res)=> {
         [collectionpoint, collectedby, wastetype, collectingequipment, quantity, date],
         (err, result)=>{
             if (err) {
-                res.send({err: err});
+                res.send({err});
             } 
             if (result){
                 // res.send({message: "Collection Successfully Submited"});
@@ -157,7 +157,7 @@ app.post('/collectionform', (req, res)=> {
                     [collectionpoint, collectedby, wastetype, collectingequipment, quantity, date, tippingpoint],
                     (err, result)=>{
                         if (err) {
-                            res.send({err: err});
+                            res.send({err});
                         } 
                         if (result){
                             res.send({message: "Collection Successfully Submited"});
@@ -196,13 +196,13 @@ app.post('/reviewsubmit', (req, res)=> {
         const date = i.dateandtime;
         const tippingpoint = i.tippingpoint;
 
-        if(tippingpoint != "Insert Point"){
+        if(tippingpoint != "Insert Point" && tippingpoint != ""){
             db.query(
                 "INSERT INTO `reviewedform` (`collectionid`, `collectionpoint`, `collectedby`, `wastetype`, `collectingequipment`, `quantity`, `dateandtime`, `tippingpoint`) VALUES (?,?,?,?,?,?,?,?)",
                 [collectionid ,collectionpoint, collectedby, wastetype, collectingequipment, quantity, date, tippingpoint],
                 (err, result)=>{
                     if (err) {
-                        res.send({err: err});
+                        res.send({err});
                     } 
                     if (result){
                         // res.send({message: "Collection Successfully Submited"});
@@ -211,7 +211,7 @@ app.post('/reviewsubmit', (req, res)=> {
                             collectionid,
                             (err, result)=>{
                                 if (err) {
-                                    res.send({err: err});
+                                    res.send({err});
                                 } 
                                 if (result){
                                     res.send({message: "Reviewed Collections are Successfully Submited"});
