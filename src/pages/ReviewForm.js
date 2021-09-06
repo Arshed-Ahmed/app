@@ -288,7 +288,7 @@ function Reviewform() {
                 </Card.Body>
             </Card>
             </Container>
-            <pre>
+            {/* <pre>
                 <code>
                     {JSON.stringify(
                         {
@@ -298,7 +298,7 @@ function Reviewform() {
                         2
                     )}
                 </code>
-            </pre>
+            </pre> */}
         </div>
     );
 }
