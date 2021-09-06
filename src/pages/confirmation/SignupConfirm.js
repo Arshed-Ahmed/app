@@ -9,11 +9,12 @@ import Form from 'react-bootstrap/Form';
 import Navibar from '../components/Navibar';
 import img from '../img.png'
 import '../App.css';
+import NavCol from '../components/NavCol';
 
 function SignupConfirm() {
   return (
     <div className="bg-light">
-      <Navibar />
+      <NavCol />
       <Container className="justify-content-center card-div">
         <Card className="home-card">
             <Card.Body>
@@ -22,7 +23,7 @@ function SignupConfirm() {
                     You Successfully Signed Up!
                 </Card.Title>
                 <Card.Subtitle align="center" className="mb-2 text-muted size-12">Please go to Sign In page to login.</Card.Subtitle>
-                <Form className="wastecollectionform">
+                <Form>
                     <Row>
                         <Col>
                           <Link to="/login">

@@ -13,6 +13,7 @@ import CollectorNavbar from './components/CollectorNavbar';
 import './App.css';
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
+import NavCol from './components/NavCol';
 
 
 function CollectionForm() {
@@ -96,7 +97,7 @@ function CollectionForm() {
 
   return (
     <div className="bg-light">
-      <CollectorNavbar />
+      <NavCol />
       <Container className="justify-content-center col-lg-9 col-md-10 col-sm-12 card-div">
         <Card className="w-100">
           <Card.Body>

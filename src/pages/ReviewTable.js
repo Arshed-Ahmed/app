@@ -10,9 +10,10 @@ import Table from 'react-bootstrap/Table';
 import AdminNavbar from './components/AdminNavbar';
 import axios from 'axios';
 import './App.css';
-// import { COLUMNS } from './components/columns';
 import { useTable, useRowSelect } from 'react-table';
 import { Checkbox } from './components/Checkbox';
+import NavCol from './components/NavCol';
+
 
 
 
@@ -41,7 +42,7 @@ function ReviewTable() {
         setValue(initialValue)
         }, [initialValue])
 
-        return <input className="tipP" value={value} onChange={onChange} onBlur={onBlur} />
+        return <input className="tipP" placeholder="Tipping Point" value={value} onChange={onChange} onBlur={onBlur} />
     }
 
     // Set our editable cell renderer as the default Cell renderer
@@ -80,7 +81,6 @@ function ReviewTable() {
         },
         {
             Header: 'Tipping Point',
-            accessor: 'tippingpoint',
             Cell : EditableCell
         },
     ]
@@ -91,13 +91,11 @@ function ReviewTable() {
     const [reviewData, setreviewData] = useState([]);
     const [originalData,setoriginalData] = useState([]);
     const [skipPageReset, setSkipPageReset] = useState(false);
-    const [res,setres] = useState();
 
     useEffect(() => {
         axios.get('http://localhost:3001/reviewform').then(
             (response) => {
                 setreviewData( response.data.result);
-                setres(response);
                 setoriginalData( response.data.result);
             }
         ).catch(
@@ -218,7 +216,7 @@ function ReviewTable() {
       
     return (
         <div className="bg-light">
-            <AdminNavbar />
+            <NavCol />
             <Container className="justify-content-center col-lg-9 col-md-10 col-sm-12 card-div">
             <Card className="w-100">
                 <Card.Body>
