@@ -7,7 +7,6 @@ import Col from 'react-bootstrap/Col';
 import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
 import Table from 'react-bootstrap/Table';
-import AdminNavbar from './components/AdminNavbar';
 import axios from 'axios';
 import './App.css';
 import { useTable, useRowSelect } from 'react-table';
