@@ -59,7 +59,7 @@ app.post('/signup', (req, res)=> {
                 [username, hash, email, type], 
                 (err, result)=>{
                     if (err) {
-                        res.send({err});
+                        res.send(err);
                     } 
                     if (result){
                         res.send({reg:true});
@@ -107,7 +107,7 @@ app.post('/login', (req, res)=> {
         username, 
         (err, result)=>{
             if (err) {
-                res.send({err});
+                res.send(err);
             } 
             if(result){
                 if ( result.length > 0){
@@ -186,7 +186,10 @@ app.get('/reviewform', (req, res)=> {
 
 app.post('/reviewsubmit', (req, res)=> {
 
-    const data = req.body;
+    const TransData = req.body;
+    const data = TransData[0];
+    const blockId = TransData[1];
+    const transactionHash = TransData[2];
     data.forEach(i => {
         const collectionid = i.collectionid;
         const collectionpoint = i.collectionpoint;
@@ -197,37 +200,32 @@ app.post('/reviewsubmit', (req, res)=> {
         const date = i.dateandtime;
         const tippingpoint = i.tippingpoint;
 
-        if(tippingpoint != ""){
-            db.query(
-                "INSERT INTO `reviewedform` (`collectionid`, `collectionpoint`, `collectedby`, `wastetype`, `collectingequipment`, `quantity`, `dateandtime`, `tippingpoint`) VALUES (?,?,?,?,?,?,?,?)",
-                [collectionid ,collectionpoint, collectedby, wastetype, collectingequipment, quantity, date, tippingpoint],
-                (err, result)=>{
-                    if (err) {
-                        res.send(err);
-                    } 
-                    if (result){
-                        // res.send({message: "Collection Successfully Submited"});
-                        db.query(
-                            "DELETE FROM `collectiondata` WHERE `collectiondata`.`collectionid` = ?",
-                            collectionid,
-                            (err, result)=>{
-                                if (err) {
-                                    res.send(err);
-                                } 
-                                if (result){
-                                    res.send({message: "Reviewed Collections are Successfully Submited"});
-                                }
+        db.query(
+            "INSERT INTO `reviewedform` (`id`, `collectionpoint`, `collectedby`, `wastetype`, `collectingequipment`, `quantity`, `dateandtime`, `tippingpoint`, `blockId`, `transactionHash`) VALUES (?,?,?,?,?,?,?,?,?,?)",
+            [collectionid ,collectionpoint, collectedby, wastetype, collectingequipment, quantity, date, tippingpoint, blockId, transactionHash],
+            (err, result)=>{
+                if (err) {
+                    res.send(err);
+                } 
+                if (result){
+                    // res.send({message: "Collection Successfully Submited"});
+                    db.query(
+                        "DELETE FROM `collectiondata` WHERE `collectiondata`.`collectionid` = ?",
+                        collectionid,
+                        (err, result)=>{
+                            if (err) {
+                                res.send(err);
+                            } 
+                            if (result){
+                                res.send({message: "Reviewed Collections are Successfully Submited"});
                             }
-                        );
-                    }
+                        }
+                    );
                 }
-            );
-        }else{
-            res.send({err: "Please Fill the Tipping Point to the Checked Collections"});
-        }
+            }
+        );
     });
 });
-
 
 app.post('/removedata', (req, res)=> {
 
@@ -250,9 +248,31 @@ app.post('/removedata', (req, res)=> {
     });
 });
 
+app.post('/check', (req, res)=> {
+
+    var TipP = [];
+    const data = req.body;
+    data.forEach(i => {
+        const tippingpoint = i.tippingpoint;
+
+        if(tippingpoint != null){
+            TipP.push(true);
+        }else{
+            TipP.push(false);
+        }
+    });
+    var hasfalse = TipP.includes(false); //true
+    if(hasfalse){
+        res.send({err: "Please Fill the Tipping Point to the Checked Collections"});
+    }else{
+        res.send({message:true});
+    }
+
+});
+
 app.get('/analytics', (req, res)=> {
     db.query(
-        "SELECT * FROM `reviewedform`",
+        "SELECT * FROM `reviewedform` ORDER BY `blockId` DESC",
         (err, result)=>{
             if (err) {
                 res.send(err);
@@ -263,6 +283,8 @@ app.get('/analytics', (req, res)=> {
         }
     );
 });
+
+
 
 app.listen(3001, () => {
     console.log("running server")

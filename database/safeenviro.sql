@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 13, 2021 at 07:09 PM
+-- Generation Time: Sep 19, 2021 at 09:32 PM
 -- Server version: 10.4.19-MariaDB
 -- PHP Version: 8.0.6
 
@@ -43,9 +43,9 @@ CREATE TABLE `collectiondata` (
 --
 
 INSERT INTO `collectiondata` (`collectionid`, `collectionpoint`, `collectedby`, `wastetype`, `collectingequipment`, `quantity`, `dateandtime`, `tippingpoint`) VALUES
-(2, 'Mawnella', 'Atkin', 'Food', 'Bin', 52, '01/09/2021 01:32:45 PM', ''),
-(8, 'Colombo', 'Klaus', 'Food', 'Truck', 65, '2021-09-06T20:01:12.547Z', ''),
-(9, 'Colombo', 'asd', 'Plastic', '1', 254, '2021-09-08T11:31:38.762Z', '');
+(206, 'Colombo', 'Kamal', 'Food', 'Truck', 11, '18/09/2021 07:21 PM (GMT+5:30) Sri Jayawardenepura', ''),
+(207, 'Colombo', 'Kamal', 'Food', 'Truck', 11, '18/09/2021 07:21 PM (GMT+5:30) Sri Jayawardenepura', ''),
+(208, 'Colombo', 'Kamal', 'Food', 'Truck', 11, '18/09/2021 07:21 PM (GMT+5:30) Sri Jayawardenepura', '');
 
 -- --------------------------------------------------------
 
@@ -63,18 +63,6 @@ CREATE TABLE `collectionform` (
   `dateandtime` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `collectionform`
---
-
-INSERT INTO `collectionform` (`collectionid`, `collectionpoint`, `collectedby`, `wastetype`, `collectingequipment`, `quantity`, `dateandtime`) VALUES
-(1, 'Kegalle', 'Robinson', 'Plastic', 'Truck, Bin', 27, '31/08/2021 12:02:05 PM'),
-(2, 'Mawnella', 'Atkin', 'Food', 'Bin', 52, '01/09/2021 01:32:45 PM'),
-(3, 'Kandy', 'Mikaelson', 'Paper', 'Truck', 31, '01/09/2021 09:15:15 AM'),
-(22, 'Colombo', 'Food', '23', 'Klaus', 0, '8/31/2021, 7:06:48 PM'),
-(25, 'Colombo', 'Klaus', 'Food', 'Truck', 65, '2021-09-06T20:01:12.547Z'),
-(26, 'Colombo', 'asd', 'Plastic', '1', 254, '2021-09-08T11:31:38.762Z');
-
 -- --------------------------------------------------------
 
 --
@@ -89,18 +77,22 @@ CREATE TABLE `reviewedform` (
   `collectingequipment` text NOT NULL,
   `quantity` int(11) NOT NULL,
   `dateandtime` text NOT NULL,
-  `tippingpoint` text NOT NULL
+  `tippingpoint` text NOT NULL,
+  `blockId` text NOT NULL,
+  `transactionHash` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `reviewedform`
 --
 
-INSERT INTO `reviewedform` (`id`, `collectionpoint`, `collectedby`, `wastetype`, `collectingequipment`, `quantity`, `dateandtime`, `tippingpoint`) VALUES
-(1, 'Kegalle', 'Robinson', 'Plastic', 'Truck, Bin', 27, '31/08/2021 12:02:05 PM', '44'),
-(3, 'Kandy', 'Mikaelson', 'Paper', 'Truck', 31, '01/09/2021 09:15:15 AM', 'Colombo'),
-(4, '542', '5152', '512', '5612', 512, '512', '55'),
-(5, 'Colombo', 'Food', '23', 'Klaus', 0, '8/31/2021, 7:06:48 PM', '55');
+INSERT INTO `reviewedform` (`id`, `collectionpoint`, `collectedby`, `wastetype`, `collectingequipment`, `quantity`, `dateandtime`, `tippingpoint`, `blockId`, `transactionHash`) VALUES
+(200, 'Mawnella', 'Atkin', 'Food', 'Bin', 52, '16/09/2021 06:24 PM (GMT+5:30) Sri Jayawardenepura', 'Puttalam', '11059896', '0x54aa87131dcc4b3c609df95c351df1ebdd617c84d6eeef45b82ae42370109d12'),
+(201, 'Colombo', 'Kamal', 'Food', 'Bin', 11, '18/09/2021 07:21 PM (GMT+5:30) Sri Jayawardenepura', 'Colombo', '11065715', '0x0b4aaf441e343de998ffa3cc52eb988ba7595dcd8363e6f9d05d7676e4fbada7'),
+(202, 'Puttalam', 'Kamal', 'Plastic', 'Truck', 23, '18/09/2021 07:21 PM (GMT+5:30) Sri Jayawardenepura', 'Colombo', '11065732', '0xee076ac604fe86d53862bfd04d630f07eb99520a600df0fa916253de344eb298'),
+(203, 'Colombo', 'Kamal', 'Food', 'Truck', 0, '18/09/2021 07:21 PM (GMT+5:30) Sri Jayawardenepura', 'Puttalam', '11065732', '0xee076ac604fe86d53862bfd04d630f07eb99520a600df0fa916253de344eb298'),
+(204, 'Colombo', 'Kamal', 'Food', 'Truck', 11, '18/09/2021 07:21 PM (GMT+5:30) Sri Jayawardenepura', 'colo', '11065750', '0x908fa998720a814a4bdee8046112443c3bf2f86c049c6388c3d0494da62698a9'),
+(205, 'Kandy', 'Klaus', 'Food', 'Truck', 12, '13/09/2021 06:30 PM (GMT+5:30) Sri Jayawardenepura', 'col', '11066108', '0xe1780bc5c9a9d8f4c420821bb6fa668ed87e48838d24a88805a71d383d16c806');
 
 -- --------------------------------------------------------
 
@@ -160,13 +152,13 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `collectiondata`
 --
 ALTER TABLE `collectiondata`
-  MODIFY `collectionid` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `collectionid` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=209;
 
 --
 -- AUTO_INCREMENT for table `collectionform`
 --
 ALTER TABLE `collectionform`
-  MODIFY `collectionid` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=27;
+  MODIFY `collectionid` int(100) NOT NULL AUTO_INCREMENT;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

@@ -18,6 +18,7 @@ import CollectorRoute from './pages/routes/CollectorRoute';
 import AlreadyLoggedin from './pages/confirmation/AlreadyLoggedin';
 import LogoutConfirm from './pages/confirmation/LogoutConfirm';
 
+
 function App() {
 
   return (

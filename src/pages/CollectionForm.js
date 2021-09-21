@@ -78,15 +78,18 @@ function CollectionForm() {
           if(response.data.err){
             setcollectionStatus(response.data.err.sqlMessage);
             setshowDanger(true);
+            setTimeout(function(){setshowDanger(false)},5000);
           } else {
             localStorage.clear();
             formReset();
             setcollectionStatus(response.data.message);
             setshowSuccess(true);
+            setTimeout(function(){setshowSuccess(false)},5000);
           }
         } else {
           setcollectionStatus(response.data.err);
           setshowDanger(false);
+          setTimeout(function(){setshowDanger(false)},5000);
         }
       }
     ).catch(
@@ -94,6 +97,7 @@ function CollectionForm() {
         console.log(err);
         setcollectionStatus(err.message);
         setshowDanger(true);
+        setTimeout(function(){setshowDanger(false)},5000);
       }
     )
   }
@@ -169,7 +173,7 @@ function CollectionForm() {
               </Row>
               <Row className="btn-div">
                 <Col>
-                  <button className="btn-reset" onClick={formReset}>RESET</button>
+                  <button className="btn-reset" type="button" onClick={formReset}>RESET</button>
                   <button className="btn-submit w-45 mb-3" type="submit">SUBMIT FORM</button>
                   {showDanger && 
                     <Alert variant="danger" className="alert-div">

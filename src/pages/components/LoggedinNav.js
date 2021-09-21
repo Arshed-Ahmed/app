@@ -5,31 +5,19 @@ import Nav from 'react-bootstrap/Nav';
 import Logo from './../logo.png';
 import Container from 'react-bootstrap/Container';
 import { NavLink, Redirect } from "react-router-dom";
-import swal from 'sweetalert';
 
 
-function CollectorNavbar() {
-    
+function LoggedinNav(Page) {
     const [islogout, setislogout] = useState(false);
     const logout = () =>{
-        swal({
-            title: "Are you sure?",
-            text: "Make sure you have finished your work!",
-            icon: "warning",
-            buttons: true,
-            dangerMode: true,
-        }).then((willDelete) => {
-            if (willDelete) {
-                localStorage.clear();
-                sessionStorage.clear();
-                document.cookie.split(";").forEach((c) => {
-                    document.cookie = c
-                    .replace(/^ +/, "")
-                    .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
-                });
-                setislogout(true);
-            }
+        localStorage.clear();
+        sessionStorage.clear();
+        document.cookie.split(";").forEach((c) => {
+            document.cookie = c
+              .replace(/^ +/, "")
+              .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
         });
+        setislogout(true);
     }
     return (
         <div>
@@ -41,7 +29,7 @@ function CollectorNavbar() {
             </Container> */}
             <Navbar className="nav-div" expand="lg">
                 <Container>
-                    <Navbar.Brand href="/analytics">
+                    <Navbar.Brand href="/reviewform">
                         <img
                         alt="SafeEnviro"
                         src={Logo}
@@ -53,18 +41,17 @@ function CollectorNavbar() {
                     <Navbar.Toggle aria-controls="basic-navbar-nav" />
                     <Navbar.Collapse className=" justify-content-end"  id="basic-navbar-nav">
                         <Nav>
-                            <NavLink className="nav-link hover" activeClassName="active" to="/analytics">Analytics</NavLink>
 
-                            <NavLink className="nav-link hover" activeClassName="active" to="/collectionform">Collection Form</NavLink>
+                            <NavLink className="nav-link hover active" activeClassName="active" to="/dash">{Page}</NavLink>
 
                             <button className="signin" onClick={logout}>SIGN OUT</button>
                         </Nav>
                     </Navbar.Collapse>
                 </Container>
             </Navbar>
-            {islogout && <Redirect to="/logoutconfirm" />}
+            {islogout && <Redirect to="/login" />}
         </div>
     );
 }
 
-export default CollectorNavbar;
+export default LoggedinNav;

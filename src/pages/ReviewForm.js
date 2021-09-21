@@ -8,15 +8,189 @@ import Card from 'react-bootstrap/Card';
 import Form from 'react-bootstrap/Form';
 import Table from 'react-bootstrap/Table';
 import axios from 'axios';
+import { Redirect } from "react-router-dom";
 import './App.css';
 import { useTable, useRowSelect } from 'react-table';
 import { Checkbox } from './components/Checkbox';
 import NavCol from './components/NavCol';
 import swal from 'sweetalert';
+import Storehash from './../contracts/Storehash.json';
+import Web3 from 'web3';
+import toHex from 'to-hex';
 
 
 
 function Reviewform() {
+    
+    const [wasteHash, setWasteHash] = useState();
+    const [retrieve, setRetrieve] = useState();
+    const [Account, setAccount] = useState();
+    const [conStatePending, setconStatePending] = useState(false);
+
+    useEffect(() => {
+        const pro =  () => {
+            // const provider = await detectEthereumProvider();
+            if (window.ethereum) {
+
+            } else {
+                swal({
+                    title: "Non ethereum browser detected!",
+                    text: "Please Install Metamask to Continue",
+                    icon: "warning",
+                    closeOnClickOutside: false,
+                    buttons: "Analytics",
+                }).then(() => {
+                    <Redirect to='/analytics' />
+                    window.location.href='/analytics';
+                });
+                return;
+            }
+        }
+        pro();
+    },[]);
+
+    useEffect(() => {
+        if(conStatePending){
+            swal({
+                title: "Please Wait",
+                text: "The Transaction is beign processed",
+                icon: "warning",
+                buttons: false,
+                closeOnClickOutside: false,
+            });
+        }
+    }, [conStatePending])
+
+    const loadBlockchain = async () => { //contract delpoyed with ganach
+        // setLoading(true);
+        if(typeof window.ethereum == "undefined") {
+            swal({
+                title: "Connection Error!",
+                text: "The Meta Mask is not connected",
+                icon: "warning",
+                buttons: true,
+            });
+        }
+        const web3 = new Web3(window.ethereum);
+        const accounts = await web3.eth.getAccounts();
+        //setCurrentAccount(account);
+    
+        if (accounts.length === 0) {
+            swal({
+                title: "Connection Error!",
+                text: "There are no Account connected",
+                icon: "warning",
+                buttons: true,
+            });
+        }
+        setAccount(accounts[0]);
+        const networkId = await web3.eth.net.getId();
+        // const networkData = Storehash.networks[networkId];
+        // const Address = networkData.address
+        // console.log(networkData);
+    
+        if (networkId === 3) { // if we use current netorkId it deploy. if not like id == 42 it will not work
+            //   setLoading(false);
+            // console.log(Address);
+            const StoreHashContract = new web3.eth.Contract(Storehash.abi, '0xc0340ec7B5C59bB6649f7b37D23C4f97944aC504');
+            
+            const data = JSON.stringify({ SafeEnviro: selectedFlatRows.map((row) => row.original),},null, 2 );
+            const hexdata = (toHex(Buffer.from(data)));
+            const sendData = "0x"+ hexdata;
+            console.log(sendData);
+            console.log(data);
+            setconStatePending(true);
+            const wasteHash = await StoreHashContract.methods.store(sendData).send({from:accounts[0]}).then(
+                (response) => {
+                    setconStatePending(false);
+                    console.log(response);
+                    const blockId = response.blockNumber;
+                    const transactionHash = response.transactionHash;
+                    const rowdata = selectedFlatRows.map((row) => row.original);
+                    const TransData = [rowdata , blockId, transactionHash];
+                    console.log(TransData);
+                    //request to backend- database
+                    axios.post('http://localhost:3001/reviewsubmit', TransData).then(
+                        (response) => {
+                            if(!response.err){
+                                if(response.data.err){
+                                    if(response.data.err.sqlMessage){
+                                        swal({
+                                            title: "Transaction Incomplete!",
+                                            text: response.data.err.sqlMessage,
+                                            icon: "warning",
+                                        });
+                                    }else{
+                                        setreviewStatus();
+                                        swal({
+                                            title: "Transaction Incomplete!",
+                                            text: response.data.err,
+                                            icon: "warning",
+                                        });
+                                    }
+                                }else if(response.data.sqlMessage){
+                                    swal({
+                                        title: "Transaction Incomplete!",
+                                        text: response.data.sqlMessage,
+                                        icon: "warning",
+                                    });
+                                }else {
+                                    swal({
+                                        title: "Transaction Complete!",
+                                        text: response.data.message,
+                                        icon: "success",
+                                        button: true,
+                                    }).then(() => {
+                                        window.location.reload();
+                                    });
+                                }
+                            } else {
+                                swal({
+                                    title: "Transaction Incomplete!",
+                                    text: response.data.err,
+                                    icon: "warning",
+                                });
+                            }
+                        }
+                    ).catch(
+                        (err) => {
+                            console.log(err);
+                            swal({
+                                title: "Transaction Incomplete!",
+                                text: err.message,
+                                icon: "warning",
+                            });
+                        }
+                    );
+                }
+            ).catch(
+                (err) => {
+                    setconStatePending(false);
+                    swal({
+                        title: "Transaction Incomplete!",
+                        text: err.message +"The Transaction was denied, This may also could be due to Insufficient funds or Network conjections, Please Resubmit the Transaction",
+                        icon: "warning",
+                    });
+                }
+            )
+            setWasteHash(wasteHash);
+            const retrieve = await StoreHashContract.methods.retrieve().call();
+            setRetrieve(retrieve);
+        } else {
+            swal({
+                title: "Network Error!",
+                text: "The contract is not detected by the network",
+                icon: "warning",
+                buttons: true,
+            });
+        }
+        console.log(wasteHash);
+        console.log(retrieve);
+        console.log(Account);
+    };
+    
+
+
     // Create an editable cell renderer
     const EditableCell = ({
         value: initialValue,
@@ -102,13 +276,10 @@ function Reviewform() {
             (err) => {
                 console.log(err);
                 setshowDanger(true);
-                setreviewStatus(err);
+                setreviewStatus(err.message);
             }
         )
     },[])
-
-    
-    
     
 
     const updateMyData = (rowIndex, columnId, value) => {
@@ -128,11 +299,10 @@ function Reviewform() {
     }
     
     useEffect(() => {
-    setSkipPageReset(false)
+        setSkipPageReset(false)
     }, [reviewData])
 
-    // Let's add a data resetter/randomizer to help
-    // illustrate that flow...
+    
     const resetData = () => setreviewData(originalData);
 
     const columns = useMemo(() => COLUMNS, []);
@@ -172,49 +342,9 @@ function Reviewform() {
     );
 
 
-    const submitdata = e => {
-        e.preventDefault();
-        const data =  selectedFlatRows.map((row) => row.original)
-        console.log(data);
-        axios.post('http://localhost:3001/reviewsubmit', data).then(
-            (response) => {
-            console.log(response);
-            if(!response.err){
-                if(response.data.err){
-                    if(response.data.err.sqlMessage){
-                        setreviewStatus(response.data.err.sqlMessage);
-                        setshowDanger(true);
-                    }else{
-                        setreviewStatus(response.data.err);
-                        setshowDanger(true);
-                    }
-                    
-                } else {
-                    localStorage.clear();
-                    setreviewStatus(response.data.message);
-                    setshowSuccess(true);
-                    refresh();
-                    setshowDanger(false);
-                }
-            } else {
-                setreviewStatus(response.data.err);
-                setshowDanger(true);
-            }
-            }
-        ).catch(
-            (err) => {
-            console.log(err);
-            setreviewStatus(err.message);
-            setshowDanger(true);
-            }
-        )
-    }
-
-
     const removedata = e => {
         e.preventDefault();
         const data =  selectedFlatRows.map((row) => row.original);
-        console.log(data);
         if(data.length === 0){
             setreviewStatus("Select data to be removed!");
             setshowDanger(true);
@@ -276,6 +406,58 @@ function Reviewform() {
     }
 
 
+    const check = () => {
+        const savedData = localStorage.getItem('isMetaMask');
+        const connect = JSON.parse(savedData);
+        if (savedData){
+            if(connect === true){
+                const data =  selectedFlatRows.map((row) => row.original);
+                if(data.length === 0) {
+                    swal({
+                        title: "Transaction Unable!",
+                        text: "Select one or more reviewed data to continue",
+                        icon: "warning",
+                    });
+                }else{
+                    axios.post('http://localhost:3001/check', data).then(
+                        (response) => {
+                            if(response.data.message){
+                                loadBlockchain();
+                            } else if(response.data.err){
+                                setreviewStatus();
+                                swal({
+                                    title: "Transaction Unable!",
+                                    text: response.data.err,
+                                    icon: "warning",
+                                });
+                            }
+                        }
+                    ).catch(
+                        (err) => {
+                            swal({
+                                title: "Transaction Unable!",
+                                text: err.message,
+                                icon: "warning",
+                            });
+                        }
+                    )
+                }
+            }else{
+                swal({
+                    title: "Connect to MetaMask!",
+                    text: "To complete this action metamask is needed",
+                    icon: "warning",
+                });
+            }
+        }else{
+            swal({
+                title: "Connect to MetaMask!",
+                text: "To complete this action metamask is needed",
+                icon: "warning",
+            });
+        }
+    }
+
     const refresh = () => {
         setTimeout(function(){window.location.reload()},3500);
     }
@@ -283,12 +465,12 @@ function Reviewform() {
     return (
         <div className="bg-light">
             <NavCol />
-            <Container className="justify-content-center col-lg-9 col-md-10 col-sm-12 card-div">
+            <Container className="justify-content-center col-lg-10 col-md-10 col-sm-12 card-div">
             <Card className="w-100">
                 <Card.Body>
                 <Card.Title><h2>Waste collection review form</h2></Card.Title>
                 <Card.Subtitle className="mb-2 text-muted">.</Card.Subtitle>
-                <Form className="wastereviewform" onSubmit={submitdata}>
+                <Form className="wastereviewform">
                     <Row>
                         <Col>
                             <Table id="review-table" bordered hover responsive size="sm" {...getTableProps}>
@@ -335,7 +517,7 @@ function Reviewform() {
                         </Col>
                         <Col className="flex justify-content-end">
                             <button className="btn-rem" onClick={removedata}>REMOVE DATA</button>
-                            <button className="btn-sub" type="submit">SUBMIT FORM</button>
+                            <button className="btn-sub" type="button" onClick={check}>SUBMIT FORM</button>
                         </Col>
                     </Row>
                     <Row className="mt-3">
