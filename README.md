@@ -8,5 +8,5 @@
 4. Run `npm install` or `yarn install` 
 5. Run `npm start` or `yarn start`
 6. Go to server folder. `cd server`
-8. Run `node index` to start the Node server.
-9. Login. 
+7. Run `node index` to start the Node server.
+8. Open `localhost:3000`. 
