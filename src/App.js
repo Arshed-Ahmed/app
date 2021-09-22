@@ -10,7 +10,6 @@ import Signup from './pages/Signup';
 import PasswordConfirm from './pages/confirmation/PasswordConfirm';
 import SignupConfirm from './pages/confirmation/SignupConfirm';
 import Analytics from './pages/Analytics';
-import ReviewTable from './pages/ReviewTable';
 import LoginConfirm from './pages/confirmation/LoginConfirm';
 import Dash from './pages/Dash';
 import AdminRoute from './pages/routes/AdminRoute';
@@ -38,7 +37,6 @@ function App() {
             <Route path="/alreadyloggedin" exact component={AlreadyLoggedin} />
             <Route path="/login" exact component={Login} />
             <Route path="/analytics" exact component={Analytics} />
-            <Route path="/reviewtable" exact component={ReviewTable} />
             <Route path="/logoutconfirm" exact component={LogoutConfirm} />
           </Switch>
         </Router>
