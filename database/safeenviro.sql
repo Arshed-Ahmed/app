@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 19, 2021 at 09:32 PM
+-- Generation Time: Sep 20, 2021 at 03:39 PM
 -- Server version: 10.4.19-MariaDB
 -- PHP Version: 8.0.6
 
@@ -35,17 +35,8 @@ CREATE TABLE `collectiondata` (
   `collectingequipment` text NOT NULL,
   `quantity` int(11) NOT NULL,
   `dateandtime` text NOT NULL,
-  `tippingpoint` text NOT NULL
+  `tippingpoint` text DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Dumping data for table `collectiondata`
---
-
-INSERT INTO `collectiondata` (`collectionid`, `collectionpoint`, `collectedby`, `wastetype`, `collectingequipment`, `quantity`, `dateandtime`, `tippingpoint`) VALUES
-(206, 'Colombo', 'Kamal', 'Food', 'Truck', 11, '18/09/2021 07:21 PM (GMT+5:30) Sri Jayawardenepura', ''),
-(207, 'Colombo', 'Kamal', 'Food', 'Truck', 11, '18/09/2021 07:21 PM (GMT+5:30) Sri Jayawardenepura', ''),
-(208, 'Colombo', 'Kamal', 'Food', 'Truck', 11, '18/09/2021 07:21 PM (GMT+5:30) Sri Jayawardenepura', '');
 
 -- --------------------------------------------------------
 
@@ -152,7 +143,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `collectiondata`
 --
 ALTER TABLE `collectiondata`
-  MODIFY `collectionid` int(100) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=209;
+  MODIFY `collectionid` int(100) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `collectionform`
