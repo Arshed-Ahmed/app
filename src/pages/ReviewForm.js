@@ -168,7 +168,7 @@ function Reviewform() {
                     setconStatePending(false);
                     swal({
                         title: "Transaction Incomplete!",
-                        text: err.message +"The Transaction was denied, This may also could be due to Insufficient funds or Network conjections, Please Resubmit the Transaction",
+                        text: err.message +" The Transaction was denied, This may also could be due to Insufficient funds or Network conjections, Please Resubmit the Transaction",
                         icon: "warning",
                     });
                 }
